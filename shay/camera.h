@@ -30,6 +30,7 @@ public:
 	// set step and rotation size
 	void SetRotateSpeed (const GLdouble &tempSpeed) {m_rotateSpeed = tempSpeed;}
 	void SetMoveSpeed (const GLdouble &tempSpeed) {m_moveSpeed = tempSpeed;}
+	void SetFOV (int FOV, float ratio);
 
 	//----------------------------------------------------------------------------------
 	//  Get Methods
