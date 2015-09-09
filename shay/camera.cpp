@@ -76,7 +76,9 @@ void Camera::DirectionLookUD(int const & tempMove){
 	m_deltaAngleUD = tempMove * m_rotateSpeed;
 }
 
-
+void SetFOV(int FOV, float ratio){
+	gluPerspective(FOV,ratio,0.000001,250000);
+}
 
 //--------------------------------------------------------------------------------------
 // Move camera backwards and forwards
@@ -86,16 +88,10 @@ void Camera::MoveFB(){
 	m_xLast = m_x;
 	m_zLast = m_z;
 
-	// set movement step
-	GLdouble moveZ = (m_deltaMoveFB * (m_lookZ) * m_moveSpeed);
-	GLdouble moveX = (m_deltaMoveFB * (m_lookX) * m_moveSpeed);
-
-	
 	// increment position
-	m_x += moveX;
-	m_z += moveZ;
-	// check plain
-	SetPlains(moveX, moveZ);
+	m_z += (m_deltaMoveFB * (m_lookZ) * m_moveSpeed);
+	m_x += (m_deltaMoveFB * (m_lookX) * m_moveSpeed);
+
 	// redisplay
 	callGLLookAt();
 }
@@ -108,14 +104,10 @@ void Camera::MoveLR(){
 	m_zLast = m_z;
 	m_xLast = m_x;
 
-	// set movement step
-	GLdouble moveZ = (m_deltaMoveLR * (m_lookZZ) * m_moveSpeed);
-	GLdouble moveX = (m_deltaMoveLR * (m_lookXX) * m_moveSpeed);
-
 	// increment position
-	m_x += moveX;
-	m_z += moveZ;
-	SetPlains(moveX, moveZ);
+	m_z += (m_deltaMoveLR * (m_lookZZ) * m_moveSpeed);
+	m_x += (m_deltaMoveLR * (m_lookXX) * m_moveSpeed);
+
 	// redisplay
 	callGLLookAt();
 }
@@ -123,10 +115,10 @@ void Camera::MoveLR(){
 //----------------------------------------------------------------------------------------
 // Moves camera up and down (NOT USED)
 //----------------------------------------------------------------------------------------
-void Camera::MoveUD(){
+/*void Camera::MoveUD(){
 	m_y += m_deltaMoveUD * (m_lookYY) * m_moveSpeed;
 	callGLLookAt();
-}
+}*/
 
 //----------------------------------------------------------------------------------------
 // Rotates camera left and right
@@ -145,7 +137,14 @@ void Camera::RotateLR(){
 //----------------------------------------------------------------------------------------
 void Camera::LookUD(){
 	m_rotateAngleUD += m_deltaAngleUD;
+	
 	m_lookY = sin(m_rotateAngleUD);
+	if(m_lookY > 1.0){
+		m_lookY = 1.0;
+	}else if(m_lookY < 0.0){
+		m_lookY = 0.0;
+	}
+	
 	callGLLookAt();
 }
 
